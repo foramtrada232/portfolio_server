@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const expressSession = require("express-session");
 const expressValidator = require("express-validator");
 const cookieParser = require("cookie-parser");
+const cors = require('cors');
 const skipper = require('skipper');
 // Created Modules
 const config = require("./config");
@@ -36,6 +37,7 @@ app.use(expressSession({
 	},
 }));
 
+app.use(cors());
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
