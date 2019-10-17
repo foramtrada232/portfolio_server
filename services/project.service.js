@@ -153,8 +153,19 @@ module.exports = {
                 if (err) {
                     reject(err)
                 } else {
-                    searchData.push({projectData : docs})
-                    console.log("DOCS:",docs)
+                   let mobileApp = [];
+                   let webApp = [];
+                    console.log("Category=======>",docs)
+                    _.forEach(docs, (doc) => {
+                        if(doc.category[0].name == 'Web Application'){
+                            webApp.push(doc);
+                        } else {
+                            mobileApp.push(doc);
+                        }
+                    })
+                    searchData.push({projectData : webApp});
+                    searchData.push({mobileData : mobileApp});
+                    // console.log("DOCS:",docs)webAppwebApp
                     if(body.hashtag){
                         await landingPageModel.aggregate([
                         {
@@ -185,12 +196,9 @@ module.exports = {
                         console.log("searchData1", searchData)
                     });
                     console.log("searchData4", searchData);
-                    // resolve(docs)
                 } else {
-                    // resolve(docs)
                 }
                 }
-                // resolve(searchData) 
             })
         })
     },
