@@ -165,7 +165,6 @@ module.exports = {
                     })
                     searchData.push({projectData : webApp});
                     searchData.push({mobileData : mobileApp});
-                    // console.log("DOCS:",docs)webAppwebApp
                     if(body.hashtag){
                         await landingPageModel.aggregate([
                         {
@@ -253,12 +252,9 @@ module.exports = {
                     }).catch((err) => {
                         reject(err);
                     });
-
                 }
             })
-
         })
-
     },
     deleteProject: (projetcId) => {
         return new Promise((resolve, reject) => {
