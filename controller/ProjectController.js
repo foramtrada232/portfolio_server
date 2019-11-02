@@ -73,6 +73,7 @@ module.exports = {
 	},
 
 	getFilteredProjects: (req, res) => {
+		console.log("======================BODY================",req.body)
 		return projectService.filterProjectsBySearch(req.body).then((data) => {
 			res.status(200).json({
 				code: 200,

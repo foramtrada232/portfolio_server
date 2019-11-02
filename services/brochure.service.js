@@ -61,6 +61,7 @@ module.exports = {
                 {
                     $project: {
                         images: 1,
+                        title: 1,
                         _id: 0
                     }
                 }
@@ -84,6 +85,7 @@ module.exports = {
                 {
                     $project: {
                         images: 1,
+                        title: 1,
                         _id: 0
                     }
                 }
@@ -204,6 +206,7 @@ module.exports = {
                 {
                     $project: {
                         images: 1,
+                        title: 1,
                         _id: 0
                     }
                 }

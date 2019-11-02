@@ -117,7 +117,7 @@ module.exports = {
         })
     },
 
-     filterProjectsBySearch: async(body) => {
+    filterProjectsBySearch: async (body) => {
         return new Promise((resolve, reject) => {
             console.log("body", body);
             let query = {
@@ -127,8 +127,8 @@ module.exports = {
             if (body.searchKey) query['$and'].push({ $or: [{ 'title': { $regex: new RegExp(body.searchKey, 'i') } }, { 'desc': { $regex: new RegExp(body.searchKey, 'i') } }] });
             if (body.technology) query['$and'].push({ 'technology._id': { '$eq': ObjectId(body.technology) } });
             if (body.category) query['$and'].push({ 'category._id': { '$eq': ObjectId(body.category) } });
-            if(body.hashtag) query['$and'].push({'hashtag':{'$in':body.hashtag}});
-            console.log("query", JSON.stringify(query, null, 2))
+            if (body.hashtag) query['$and'].push({ 'hashtag': { '$in': body.hashtag } });
+            console.log("query-------------------->>>>>>>>>>>>>>>>", JSON.stringify(query, null, 2))
             projectModel.aggregate([
                 {
                     $lookup: {
@@ -139,7 +139,7 @@ module.exports = {
                     }
                 },
                 {
-                    $lookup:{
+                    $lookup: {
                         from: 'categories',
                         localField: 'category',
                         foreignField: '_id',
@@ -149,54 +149,60 @@ module.exports = {
                 {
                     $match: query
                 }
-            ]).exec(async(err, docs) => {
+            ]).exec(async (err, docs) => {
                 if (err) {
                     reject(err)
                 } else {
-                   let mobileApp = [];
-                   let webApp = [];
-                    console.log("Category=======>",docs)
+                    let mobileApp = [];
+                    let webApp = [];
+                    console.log("Category docs=======>", docs)
                     _.forEach(docs, (doc) => {
-                        if(doc.category[0].name == 'Web Application'){
+                        console.log('ddddddddddddddddd',doc.category[0].name);
+
+                        if (doc.category[0].name == 'Web Application') {
                             webApp.push(doc);
                         } else {
                             mobileApp.push(doc);
                         }
                     })
-                    searchData.push({projectData : webApp});
-                    searchData.push({mobileData : mobileApp});
-                    if(body.hashtag){
+
+                    console.log('WEb app---------->',mobileApp);
+
+                    searchData.push({ projectData: webApp });
+                    searchData.push({ mobileData: mobileApp });
+                    if (body.hashtag) {
                         await landingPageModel.aggregate([
-                        {
-                           $match : {'hashtag':{'$in':body.hashtag}}
-                        }
-                    ]).exec((err, landingData) => {
-                        if (landingData) searchData.push({landingData : landingData})
-                        logoDesignModel.aggregate([
                             {
-                               $match : {'hashtag':{'$in':body.hashtag}}
+                                $match: { 'hashtag': { '$in': body.hashtag } }
                             }
-                        ]).exec((err, logoData) => {
-                            console.log("logoData:",logoData);
-                            if (logoData) searchData.push({'logoData' : logoData})
-                            console.log("searchData2", searchData)
-                             brochureModel.aggregate([
+                        ]).exec((err, landingData) => {
+                            if (landingData) searchData.push({ landingData: landingData })
+                            logoDesignModel.aggregate([
                                 {
-                                   $match : {'hashtag':{'$in':body.hashtag}}
+                                    $match: { 'hashtag': { '$in': body.hashtag } }
                                 }
-                            ]).exec((err, brochureData) => {
-                                console.log("brochureData:",brochureData);
-                                if (brochureData) searchData.push({'brochureData' : brochureData})
-                                console.log("searchData3", searchData);
-                                resolve(searchData)
-                            })
+                            ]).exec((err, logoData) => {
+                                // console.log("logoData:", logoData);
+                                if (logoData) searchData.push({ 'logoData': logoData })
+                                // console.log("searchData2", searchData)
+                                brochureModel.aggregate([
+                                    {
+                                        $match: { 'hashtag': { '$in': body.hashtag } }
+                                    }
+                                ]).exec((err, brochureData) => {
+                                    // console.log("brochureData:", brochureData);
+                                    if (brochureData) searchData.push({ 'brochureData': brochureData })
+                                    // console.log("searchData3", searchData);
+                                    resolve(searchData)
+                                })
+                            });
+                            // console.log("Landing:", landingData)
+                            // console.log("searchData1", searchData)
                         });
-                        console.log("Landing:",landingData)
-                        console.log("searchData1", searchData)
-                    });
-                    console.log("searchData4", searchData);
-                } else {
-                }
+                        // console.log("searchData4", searchData);
+                    } else {
+                        resolve(searchData)
+                    }
                 }
             })
         })
@@ -302,7 +308,7 @@ module.exports = {
                 {
                     $project:
                     {
-                        _id : '$_id' ,
+                        _id: '$_id',
                         hashtag: 1
                     }
                 }
@@ -316,9 +322,9 @@ module.exports = {
             })
         })
     },
-    login:(data)=>{
+    login: (data) => {
         return new Promise((resolve, reject) => {
-            adminModel.findOne({ email: data.email},function (err, admin) {
+            adminModel.findOne({ email: data.email }, function (err, admin) {
                 console.log("userrrrrrr", admin);
                 if (err) {
                     reject({ status: 500, message: 'Internal Serevr Error' });
@@ -335,9 +341,9 @@ module.exports = {
                         expiresIn: process.env.TOKENEXPIRETIME
                     });
                     console.log('token=============>', token);
-                    const obj={
-                        data:admin,
-                        token:token
+                    const obj = {
+                        data: admin,
+                        token: token
                     }
                     resolve(obj);
                 }
@@ -345,15 +351,15 @@ module.exports = {
 
         })
     },
-    addAdmin:(data)=>{
-        console.log('data============>',data);
+    addAdmin: (data) => {
+        console.log('data============>', data);
         return new Promise((resolve, reject) => {
             const newAdmin = new adminModel(data);
-            newAdmin.save((err,savedAdmin)=>{
-                if(err){
+            newAdmin.save((err, savedAdmin) => {
+                if (err) {
                     reject(err);
-                } else{
-                    console.log("====admin=========",savedAdmin);
+                } else {
+                    console.log("====admin=========", savedAdmin);
                     resolve(savedAdmin)
                 }
             })
