@@ -155,51 +155,40 @@ module.exports = {
                 } else {
                     let mobileApp = [];
                     let webApp = [];
-                    console.log("Category docs=======>", docs)
+                    // console.log("Category docs=======>", docs)
                     _.forEach(docs, (doc) => {
-                        console.log('ddddddddddddddddd',doc.category[0].name);
-
                         if (doc.category[0].name == 'Web Application') {
                             webApp.push(doc);
                         } else {
                             mobileApp.push(doc);
                         }
                     })
-
-                    console.log('WEb app---------->',mobileApp);
-
                     searchData.push({ projectData: webApp });
                     searchData.push({ mobileData: mobileApp });
-                    if (body.hashtag) {
+                    if ( body.searchKey || body.hashtag) {
                         await landingPageModel.aggregate([
                             {
-                                $match: { 'hashtag': { '$in': body.hashtag } }
-                            }
+                                    $match: query
+                            },
                         ]).exec((err, landingData) => {
+                            console.log("landingData:",landingData)
                             if (landingData) searchData.push({ landingData: landingData })
                             logoDesignModel.aggregate([
                                 {
-                                    $match: { 'hashtag': { '$in': body.hashtag } }
+                                    $match: query
                                 }
                             ]).exec((err, logoData) => {
-                                // console.log("logoData:", logoData);
                                 if (logoData) searchData.push({ 'logoData': logoData })
-                                // console.log("searchData2", searchData)
                                 brochureModel.aggregate([
                                     {
-                                        $match: { 'hashtag': { '$in': body.hashtag } }
+                                        $match: query
                                     }
                                 ]).exec((err, brochureData) => {
-                                    // console.log("brochureData:", brochureData);
                                     if (brochureData) searchData.push({ 'brochureData': brochureData })
-                                    // console.log("searchData3", searchData);
                                     resolve(searchData)
                                 })
                             });
-                            // console.log("Landing:", landingData)
-                            // console.log("searchData1", searchData)
                         });
-                        // console.log("searchData4", searchData);
                     } else {
                         resolve(searchData)
                     }
@@ -337,7 +326,7 @@ module.exports = {
                     if (!passwordIsValid) {
                         reject({ status: 401, message: "password is not valid", auth: false, token: null });
                     }
-                    const token = jwt.sign({ id: admin._id }, process.env.CYPHERKEY, {
+                    const token = jwt.sign({ id: admin._id }, process.env.CYPHERKEY,{
                         expiresIn: process.env.TOKENEXPIRETIME
                     });
                     console.log('token=============>', token);
@@ -348,7 +337,6 @@ module.exports = {
                     resolve(obj);
                 }
             });
-
         })
     },
     addAdmin: (data) => {
