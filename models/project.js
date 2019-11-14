@@ -14,7 +14,8 @@ const projectSchema = new Schema({
 	products: { type: String, default: "" },
 	services: { type: String, default: "" },
 	features: { type: String, default: "" },
-	hashtag: { type: Array,default: [] }
+	hashtag: { type: Array,default: [] },
+	link: { type: String, default:''}
 }, { timestamps: true });
 
 module.exports = mongoose.model("projects", projectSchema);

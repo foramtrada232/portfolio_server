@@ -157,7 +157,7 @@ module.exports = {
                     let webApp = [];
                     // console.log("Category docs=======>", docs)
                     _.forEach(docs, (doc) => {
-                        if (doc.category[0].name == 'Web Application') {
+                        if (doc.category[0].name == 'Website Design') {
                             webApp.push(doc);
                         } else {
                             mobileApp.push(doc);

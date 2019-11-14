@@ -9,6 +9,7 @@ const expressValidator = require("express-validator");
 const cookieParser = require("cookie-parser");
 const cors = require('cors');
 const skipper = require('skipper');
+var compression = require('compression'); 
 // Created Modules
 const config = require("./config");
 const Database = require("./DB/database");
@@ -37,7 +38,14 @@ app.use(expressSession({
 	},
 }));
 
-app.use(cors());
+// app.use(cors());
+app.use(cors({
+	'allowedHeaders': ['sessionId', 'Content-Type'],
+	'exposedHeaders': ['sessionId'],
+	'origin': '*',
+	'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+	'preflightContinue': false
+  }));
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -45,6 +53,8 @@ app.use(expressValidator());
 app.use(skipper());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(compression());
+
 
 // API routes initialise
 require("./routes/index")(app);
@@ -69,6 +79,15 @@ if (app.get("env") === "development") {
 	});
 }
 
+//app.use(compression());
+
+app.get('*.js', function (req, res, next) {
+	req.url = req.url + '.gz';
+	res.set('Content-Encoding', 'gzip');
+	next();
+  });
+  
+
 // Production error handler
 // Does not display stacktrace to the user
 app.use((err, req, res) => {
@@ -78,7 +97,6 @@ app.use((err, req, res) => {
 		error: "",
 	});
 });
-
 
 // db configuration
 Database.config(
