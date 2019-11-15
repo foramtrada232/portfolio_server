@@ -5,6 +5,7 @@ const adminModel = require("../models/admin");
 const landingPageModel = require("../models/landingpage");
 const logoDesignModel = require("../models/logoDesign");
 const brochureModel = require("../models/brochure");
+const flyerModel = require("../models/flyer");
 const fileUploader = require("./fileUpload");
 const ObjectId = require('mongodb').ObjectId;
 const _ = require('lodash');
@@ -155,7 +156,7 @@ module.exports = {
                 } else {
                     let mobileApp = [];
                     let webApp = [];
-                    // console.log("Category docs=======>", docs)
+                    console.log("Category docs=======>", docs)
                     _.forEach(docs, (doc) => {
                         if (doc.category[0].name == 'Website Design') {
                             webApp.push(doc);
@@ -185,7 +186,16 @@ module.exports = {
                                     }
                                 ]).exec((err, brochureData) => {
                                     if (brochureData) searchData.push({ 'brochureData': brochureData })
-                                    resolve(searchData)
+                                    flyerModel.aggregate([
+                                        {
+                                            $match : query
+                                        }
+                                    ]).exec((err, flyerData) => {
+                                        console.log("flyerData:",flyerData)
+                                        if (flyerData) searchData.push({'flyerData' : flyerData})
+                                        console.log("searchData:",searchData)
+                                        resolve(searchData)
+                                    })
                                 })
                             });
                         });
