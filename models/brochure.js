@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 
 const brochureSchema = new Schema({
 	images: { type: Array, default: []  },
+	pdf: {type: Array, default:[]},
 	hashtag: { type: Array,default: [] },
 	title: {type: String,default:''}
 }, {timestamps: true});

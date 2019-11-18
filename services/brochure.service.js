@@ -35,12 +35,26 @@ module.exports = {
                     })
                     const uploadPath = "/brochure/"
                     return fileUploader.uploadFile(uploadPath, file).then((uploadFiles) => {
+                        console.log("LENGTH:",uploadFiles.length)
                         if (uploadFiles.length) {
                             let images = saveBrochure.images;
-                            for (let i = 0; i < uploadFiles.length; i++) {
-                                images = uploadFiles[0].fd.split('/uploads/').reverse()[0];
+                            let pdf = saveBrochure.pdf;
+                            // for (let i = 0; i < uploadFiles.length; i++) {
+                            //     images = uploadFiles[0].fd.split('/uploads/').reverse()[0];
+                            // }
+                            for(var i=0;i<uploadFiles.length;i++){
+                                // console.log("FILE name:",uploadFiles[i].filename)
+                                if(_.includes(uploadFiles[i].filename, '.pdf')){
+                                     pdf = uploadFiles[i].fd.split('/uploads/').reverse()[0];
+                                }else{
+                                     images = uploadFiles[i].fd.split('/uploads/').reverse()[0];
+                                }
                             }
-                            broucherModel.findOneAndUpdate({ _id: saveBrochure._id }, { images: images }, { upsert: true, new: true }).exec((error, updated) => {
+                            console.log("IMAGES:",images);
+                            console.log("PDF:",pdf)
+                            // saveBrochure['images'] = imagesData;
+                            // saveBrochure['pdf'] = pdf;
+                            broucherModel.findOneAndUpdate({ _id: saveBrochure._id }, {$set:{images: images, pdf: pdf }}, { upsert: true, new: true }).exec((error, updated) => {
                                 if (error) {
                                     reject(error);
                                 } else {
@@ -63,19 +77,18 @@ module.exports = {
                     $project: {
                         images: 1,
                         title: 1,
+                        pdf: 1,
                         _id: 0
                     }
                 }
-            ])
-                .exec((err, brochure) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        console.log("landing pages===>", brochure);
-                        resolve(brochure)
-                    }
-                })
-
+            ]).exec((err, brochure) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    console.log("landing pages===>", brochure);
+                    resolve(brochure)
+                }
+            })
         })
     },
 

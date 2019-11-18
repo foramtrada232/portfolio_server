@@ -1,14 +1,19 @@
 const brochureService = require('../services/brochure.service');
 
 module.exports = {
-    addBrochure: (req, res) => {
-		console.log("req.body===========>",req.body);
+	addBrochure: (req, res) => {
+		console.log("req.body===========>", req.body);		
 		if (typeof req.body.hashtag === 'string') {
 			req.body.hashtag = req.body.hashtag.split(',');
 		}
-        const file = req.file('uploadFile');
-        // console.log("files==========>", req.file.length, file);
-        return brochureService.addBrochure(req.body,file).then((data) => {
+		const file = req.file('uploadFile');
+		// const pdfFile = req.file('uploadPdf');
+		// const fileData = {
+		// 	file : file,
+		// 	pdfFile : pdfFile
+		// }
+		// console.log("files==========>", req.file('uploadFile'));
+		return brochureService.addBrochure(req.body, file).then((data) => {
 			res.status(200).json({
 				code: 200,
 				message: "Brochures Added successfully",
@@ -22,12 +27,12 @@ module.exports = {
 		})
 	},
 
-	getBrochure:(req,res)=>{
+	getBrochure: (req, res) => {
 		return brochureService.getBrochure().then((data) => {
 			res.status(200).json({
 				code: 200,
 				message: "got the data",
-				data:data
+				data: data
 			})
 		}).catch((err) => {
 			console.log("on line 36 >>>>>>>>>>>>", err);
@@ -38,14 +43,14 @@ module.exports = {
 		})
 	},
 
-	addLandingPage:(req,res)=>{
-		console.log("req.body===========>",req.body);
+	addLandingPage: (req, res) => {
+		console.log("req.body===========>", req.body);
 		if (typeof req.body.hashtag === 'string') {
 			req.body.hashtag = req.body.hashtag.split(',');
 		}
 		const file = req.file('uploadFile');
-        // console.log("files==========>", req.file.length, file);
-        return brochureService.addLandingPage(req.body,file).then((data) => {
+		// console.log("files==========>", req.file.length, file);
+		return brochureService.addLandingPage(req.body, file).then((data) => {
 			res.status(200).json({
 				code: 200,
 				message: "Landing page Added successfully",
@@ -59,13 +64,13 @@ module.exports = {
 		})
 	},
 
-	getLandingPage:(req,res)=>{
+	getLandingPage: (req, res) => {
 		console.log("=========================")
 		return brochureService.getLandingPage().then((data) => {
 			res.status(200).json({
 				code: 200,
 				message: "got the data",
-				data:data
+				data: data
 			})
 		}).catch((err) => {
 			console.log("on line 36 >>>>>>>>>>>>", err);
@@ -76,14 +81,14 @@ module.exports = {
 		})
 	},
 
-	addLogoDesign:(req,res)=>{
-		console.log("req.body===========>",req.body);
+	addLogoDesign: (req, res) => {
+		console.log("req.body===========>", req.body);
 		if (typeof req.body.hashtag === 'string') {
 			req.body.hashtag = req.body.hashtag.split(',');
 		}
 		const file = req.file('uploadFile');
-        // console.log("files==========>", req.file.length, file);
-        return brochureService.addLogoDesign(req.body,file).then((data) => {
+		// console.log("files==========>", req.file.length, file);
+		return brochureService.addLogoDesign(req.body, file).then((data) => {
 			res.status(200).json({
 				code: 200,
 				message: "Logo Added successfully",
@@ -97,12 +102,12 @@ module.exports = {
 		})
 	},
 
-	getLogoDesign:(req,res)=>{
+	getLogoDesign: (req, res) => {
 		return brochureService.getLogoDesign().then((data) => {
 			res.status(200).json({
 				code: 200,
 				message: "got the data",
-				data:data
+				data: data
 			})
 		}).catch((err) => {
 			console.log("on line 36 >>>>>>>>>>>>", err);
@@ -114,13 +119,13 @@ module.exports = {
 	},
 
 	addFlyer: (req, res) => {
-		console.log("req.body===========>",req.body);
+		console.log("req.body===========>", req.body);
 		if (typeof req.body.hashtag === 'string') {
 			req.body.hashtag = req.body.hashtag.split(',');
 		}
-        const file = req.file('uploadFile');
-        // console.log("files==========>", req.file.length, file);
-        return brochureService.addFlyer(req.body,file).then((data) => {
+		const file = req.file('uploadFile');
+		// console.log("files==========>", req.file.length, file);
+		return brochureService.addFlyer(req.body, file).then((data) => {
 			res.status(200).json({
 				code: 200,
 				message: "Flyer Added successfully",
@@ -134,12 +139,12 @@ module.exports = {
 		})
 	},
 
-	getFlyer:(req,res)=>{
+	getFlyer: (req, res) => {
 		return brochureService.getFlyer().then((data) => {
 			res.status(200).json({
 				code: 200,
 				message: "got the data",
-				data:data
+				data: data
 			})
 		}).catch((err) => {
 			console.log("on line 36 >>>>>>>>>>>>", err);

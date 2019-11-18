@@ -11,7 +11,7 @@ module.exports = {
 				category: Joi.string().required(),
 				colorPalette: Joi.array(),
 				fontFamily: Joi.string(),
-				link: Joi.strict(),
+				link: Joi.string(),
 				products: Joi.string(),
 				services: Joi.string(),
 				features: Joi.string(),
