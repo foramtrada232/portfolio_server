@@ -44,7 +44,7 @@
     "path": "^0.12.7",
     "randomstring": "^1.1.5",
     "skipper": "^0.8.7",
-    "webpack": "^4.41.2"
+    "webpack": "^5.75.0"
   },
   "devDependencies": {
     "compression-webpack-plugin": "^3.0.0",
